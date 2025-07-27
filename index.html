@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Vault - Secure Card Storage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Card Vault - Secure Card Storage</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -13,18 +13,16 @@
 <body class="min-h-screen transition-colors duration-300" id="body">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header -->
-        <header class="text-center mb-8">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <header class="text-center mb-8">            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
                     <i class="fas fa-shield-alt mr-2"></i>Card Vault
                 </h1>
-                <button id="darkModeToggle" class="p-2 rounded-lg transition-colors duration-300 hover:bg-gray-200 dark:hover:bg-gray-700">
-                    <i class="fas fa-moon text-xl"></i>
+                <button id="darkModeToggle" class="p-2 rounded-lg transition-colors duration-300 hover:bg-indigo-50 dark:hover:bg-gray-700">
+                    <i class="fas fa-moon text-xl text-indigo-600 dark:text-indigo-400"></i>
                 </button>
             </div>
-            <p class="text-gray-600 dark:text-gray-400">Securely encrypt and store your credit card information</p>
-            <div class="mt-4 p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg border-l-4 border-yellow-500">
-                <p class="text-sm text-yellow-800 dark:text-yellow-200">
+            <p class="text-gray-600 dark:text-gray-400">Securely encrypt and store your credit card information</p>            <div class="mt-4 p-3 bg-indigo-50 dark:bg-indigo-900 rounded-lg border-l-4 border-indigo-500">
+                <p class="text-sm text-indigo-800 dark:text-indigo-200">
                     <i class="fas fa-info-circle mr-2"></i>
                     This is a demo application. Data is encrypted and stored locally in your browser.
                 </p>
@@ -33,9 +31,8 @@
 
         <div class="grid lg:grid-cols-2 gap-8">
             <!-- Card Input Form -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center">
-                    <i class="fas fa-credit-card mr-2 text-blue-500"></i>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">                <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center">
+                    <i class="fas fa-credit-card mr-2 text-indigo-600"></i>
                     Add New Card
                 </h2>
                 
@@ -44,9 +41,8 @@
                     <div>
                         <label for="cardholderName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Cardholder Name
-                        </label>
-                        <input type="text" id="cardholderName" name="cardholderName" 
-                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+                        </label>                        <input type="text" id="cardholderName" name="cardholderName" 
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
                                placeholder="John Doe" required>
                         <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
                     </div>
@@ -55,9 +51,8 @@
                     <div>
                         <label for="cardNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Card Number
-                        </label>
-                        <input type="text" id="cardNumber" name="cardNumber" 
-                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+                        </label>                        <input type="text" id="cardNumber" name="cardNumber" 
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
                                placeholder="1234 5678 9012 3456" maxlength="19" required>
                         <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
                     </div>
@@ -67,26 +62,23 @@
                         <div>
                             <label for="expiryDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Expiry Date
-                            </label>
-                            <input type="text" id="expiryDate" name="expiryDate" 
-                                   class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+                            </label>                            <input type="text" id="expiryDate" name="expiryDate" 
+                                   class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
                                    placeholder="MM/YY" maxlength="5" required>
                             <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
                         </div>
                         <div>
                             <label for="cvv" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 CVV
-                            </label>
-                            <input type="password" id="cvv" name="cvv" 
-                                   class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
+                            </label>                            <input type="password" id="cvv" name="cvv" 
+                                   class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
                                    placeholder="123" maxlength="4" required>
                             <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex space-x-4 pt-4">
-                        <button type="submit" class="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 flex items-center justify-center">
+                    <div class="flex space-x-4 pt-4">                        <button type="submit" class="flex-1 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white py-2 px-4 rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center">
                             <i class="fas fa-lock mr-2"></i>
                             Encrypt & Save
                         </button>
@@ -100,14 +92,12 @@
 
             <!-- Stored Cards & Actions -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center">
-                    <i class="fas fa-database mr-2 text-green-500"></i>
+                <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center">                    <i class="fas fa-database mr-2 text-indigo-600"></i>
                     Stored Cards
                 </h2>
 
-                <!-- Storage Info -->
-                <div class="mb-4 p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                    <p class="text-sm text-blue-800 dark:text-blue-200">
+                <!-- Storage Info -->                <div class="mb-4 p-3 bg-indigo-50 dark:bg-indigo-900 rounded-lg">
+                    <p class="text-sm text-indigo-800 dark:text-indigo-200">
                         <i class="fas fa-info-circle mr-2"></i>
                         Cards: <span id="cardCount">0</span> | 
                         Encryption: AES-256 | 
@@ -125,16 +115,34 @@
                         <option value="localStorage">Local Storage (Browser Only)</option>
                         <option value="firebase">Firebase Firestore (Cloud)</option>
                         <option value="supabase">Supabase (Cloud)</option>
-                    </select>
-                    <div id="cloudSetupInfo" class="mt-2 text-xs text-gray-600 dark:text-gray-400 hidden">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Configure cloud credentials in cloud-config.js
+                    </select>                    <div id="cloudSetupInfo" class="mt-2 text-xs text-gray-600 dark:text-gray-400 hidden">
+                        <div class="bg-blue-50 dark:bg-blue-900 p-3 rounded border-l-4 border-blue-400">
+                            <div class="flex items-start space-x-2">
+                                <i class="fas fa-cloud-upload-alt text-blue-500 mt-0.5"></i>
+                                <div>
+                                    <p class="font-medium text-blue-800 dark:text-blue-200 mb-1">Cloud Storage Setup Required</p>
+                                    <p class="text-blue-700 dark:text-blue-300 mb-2">To use cloud storage, update credentials in <code>cloud-config.js</code></p>
+                                    <div class="text-blue-600 dark:text-blue-400">
+                                        <strong>For Supabase:</strong>
+                                        <ol class="list-decimal list-inside mt-1 space-y-1">
+                                            <li>Go to <a href="https://supabase.com/dashboard" target="_blank" class="underline">supabase.com/dashboard</a></li>
+                                            <li>Create a new project</li>
+                                            <li>Go to Settings → API</li>
+                                            <li>Copy URL and anon key to cloud-config.js</li>
+                                            <li>Run the SQL setup script</li>
+                                        </ol>
+                                    </div>
+                                    <p class="text-xs text-blue-500 dark:text-blue-400 mt-2">
+                                        💡 Currently using demo config - cards save to localStorage
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="space-y-3 mb-6">
-                    <button id="viewAllCards" class="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-300 flex items-center justify-center">
+                <div class="space-y-3 mb-6">                    <button id="viewAllCards" class="w-full bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition-colors duration-300 flex items-center justify-center">
                         <i class="fas fa-eye mr-2"></i>
                         Decrypt & View All Cards
                     </button>
@@ -181,12 +189,11 @@
                 <i class="fas fa-github mr-1"></i>
                 Open Source Demo
             </p>
-        </footer>
-    </div>
+        </footer>    </div>
 
-    <script src="simple-cloud.js"></script>
+    <script src="cloud-config.js"></script>
+    <script src="supabase-debug.js"></script>
     <script src="fast-app.js"></script>
-    <script src="demo-data.js"></script>
     <script src="test.js"></script>
 </body>
 </html>

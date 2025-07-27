@@ -1,0 +1,13 @@
+# Flask and core dependencies
+Flask==2.3.3
+Werkzeug==2.3.7
+
+# Production server
+gunicorn==21.2.0
+
+# Security and utilities
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Development dependencies (optional)
+flask-cors==4.0.0

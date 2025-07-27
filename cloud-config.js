@@ -34,13 +34,19 @@ const firebaseConfig = {
 // 4. Copy the URL and anon public key
 
 const supabaseConfig = {
-    // Replace with your Supabase config
-    url: "https://your-project.supabase.co",
-    anonKey: "your-anon-key-here"
+    // ⚠️ REPLACE THESE WITH YOUR REAL SUPABASE CREDENTIALS ⚠️
+    // 
+    // 1. Go to https://supabase.com/dashboard
+    // 2. Select your card-vault project  
+    // 3. Go to Settings → API
+    // 4. Copy your Project URL and anon public key below:
     
-    // Example (DO NOT USE - replace with your own):
+    url: "PASTE_YOUR_PROJECT_URL_HERE",           // e.g., "https://abcdefghijk.supabase.co"
+    anonKey: "PASTE_YOUR_ANON_PUBLIC_KEY_HERE"   // Long string starting with "eyJ..."
+    
+    // Example of what they should look like (DO NOT USE THESE):
     // url: "https://abcdefghijklmnop.supabase.co",
-    // anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    // anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdoaWprbG1ub3AiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTYzNTc3MzU5NiwiZXhwIjoxOTUxMzQ5NTU2fQ.your-real-key-here"
 };
 
 // ==================== CLOUD STORAGE MANAGER ====================
@@ -85,26 +91,55 @@ class CloudStorageManager {
             this.isConnected = false;
             return false;
         }
-    }
-
-    // Initialize Supabase
-    async initializeSupabase() {
-        try {
-            if (!supabaseConfig.url || supabaseConfig.url === "https://your-project.supabase.co") {
-                throw new Error('Supabase configuration not set. Please update cloud-config.js');
+    }    // Initialize Supabase
+    async initializeSupabase() {        try {
+            // Check for demo/placeholder URLs
+            if (!supabaseConfig.url || 
+                supabaseConfig.url === "https://demo.supabase.co" ||
+                supabaseConfig.url === "https://xyzcompany.supabase.co" ||
+                supabaseConfig.url === "PASTE_YOUR_PROJECT_URL_HERE" ||
+                supabaseConfig.anonKey === "demo-key" ||
+                supabaseConfig.anonKey === "PASTE_YOUR_ANON_PUBLIC_KEY_HERE" ||
+                supabaseConfig.anonKey.includes("demo-key-for-testing")) {
+                
+                cardVault.logToConsole('⚠️ Using placeholder Supabase configuration - you need to set up real credentials!', 'error');
+                cardVault.logToConsole('📋 SETUP STEPS:', 'info');
+                cardVault.logToConsole('1. Go to https://supabase.com/dashboard', 'info');
+                cardVault.logToConsole('2. Create a new project called "card-vault"', 'info');
+                cardVault.logToConsole('3. Wait for setup to complete (2-3 minutes)', 'info');
+                cardVault.logToConsole('4. Go to Settings → API', 'info');
+                cardVault.logToConsole('5. Copy Project URL and anon public key', 'info');
+                cardVault.logToConsole('6. Replace the placeholder values in cloud-config.js', 'info');
+                cardVault.logToConsole('7. Run the SQL setup script in the SQL Editor', 'info');
+                
+                // Simulate connection attempt for demo purposes
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                throw new Error('Placeholder Supabase configuration detected - please set up real credentials to use cloud storage');
             }
 
-            const { createClient } = supabase;
-            this.supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+            // Check if Supabase v2 client is loaded
+            if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
+                throw new Error('Supabase v2 client not loaded. Make sure @supabase/supabase-js@2 is included in your HTML');
+            }
+
+            // Create Supabase client
+            this.supabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+            
+            // Test connection by attempting to query the table
+            cardVault.logToConsole('Testing Supabase connection...', 'info');
+            const { data, error } = await this.supabase.from('card_vault').select('id').limit(1);
+            
+            if (error) {
+                // If table doesn't exist, that's okay for initial setup
+                if (error.code === 'PGRST116' || error.message.includes('relation') || error.message.includes('does not exist')) {
+                    cardVault.logToConsole('Supabase connected but card_vault table not found. Please run the SQL setup script.', 'warning');
+                } else {
+                    throw error;
+                }
+            }
+            
             this.isConnected = true;
-            
-            // Test connection
-            const { data, error } = await this.supabase.from('card_vault').select('count').limit(1);
-            if (error && error.code !== 'PGRST116') { // PGRST116 is "table not found" which is OK
-                throw error;
-            }
-            
-            cardVault.logToConsole('Supabase initialized successfully', 'success');
+            cardVault.logToConsole('Supabase client initialized successfully', 'success');
             return true;
         } catch (error) {
             cardVault.logToConsole(`Supabase initialization failed: ${error.message}`, 'error');
@@ -148,9 +183,7 @@ class CloudStorageManager {
             default:
                 return this.saveToLocalStorage(encryptedCard);
         }
-    }
-
-    // Get stored cards from current backend
+    }    // Get stored cards from current backend
     async getStoredCards() {
         switch (this.currentBackend) {
             case 'firebase':
@@ -161,6 +194,11 @@ class CloudStorageManager {
             default:
                 return this.getFromLocalStorage();
         }
+    }
+
+    // Alias for backward compatibility
+    async getCards() {
+        return await this.getStoredCards();
     }
 
     // Delete card from current backend
@@ -174,9 +212,7 @@ class CloudStorageManager {
             default:
                 return this.deleteFromLocalStorage(cardId);
         }
-    }
-
-    // Clear all cards from current backend
+    }    // Clear all cards from current backend
     async clearAllCards() {
         switch (this.currentBackend) {
             case 'firebase':
@@ -187,6 +223,11 @@ class CloudStorageManager {
             default:
                 return this.clearLocalStorage();
         }
+    }
+
+    // Alias for backward compatibility
+    async clearAll() {
+        return await this.clearAllCards();
     }
 
     // ==================== FIREBASE METHODS ====================
@@ -327,12 +368,28 @@ class CloudStorageManager {
         existing.push(encryptedCard);
         localStorage.setItem('cardVault_encryptedCards', JSON.stringify(existing));
         cardVault.logToConsole(`Card saved to localStorage (ID: ${encryptedCard.id})`, 'success');
-    }
-
-    getFromLocalStorage() {
+    }    getFromLocalStorage() {
         try {
-            const stored = localStorage.getItem('cardVault_encryptedCards');
-            return stored ? JSON.parse(stored) : [];
+            // Check for cards in new format first
+            let stored = localStorage.getItem('cardVault_encryptedCards');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            
+            // Check for cards in old format (from simple-cloud.js)
+            stored = localStorage.getItem('cardVault_cards');
+            if (stored) {
+                const oldCards = JSON.parse(stored);
+                // Migrate to new format if any old cards exist
+                if (oldCards.length > 0) {
+                    localStorage.setItem('cardVault_encryptedCards', JSON.stringify(oldCards));
+                    localStorage.removeItem('cardVault_cards'); // Clean up old storage
+                    cardVault.logToConsole(`Migrated ${oldCards.length} cards to new storage format`, 'info');
+                }
+                return oldCards;
+            }
+            
+            return [];
         } catch (error) {
             cardVault.logToConsole(`Error reading localStorage: ${error.message}`, 'error');
             return [];
@@ -370,9 +427,7 @@ class CloudStorageManager {
                 connectionStatusElement.innerHTML = icon;
             }
         }
-    }
-
-    getBackendDisplayName() {
+    }    getBackendDisplayName() {
         switch (this.currentBackend) {
             case 'firebase': return 'Firebase Firestore';
             case 'supabase': return 'Supabase';
@@ -380,7 +435,37 @@ class CloudStorageManager {
             default: return 'Unknown';
         }
     }
+
+    // Validate all required methods exist (for debugging)
+    validateMethods() {
+        const requiredMethods = ['setBackend', 'saveCard', 'getCards', 'deleteCard', 'clearAll'];
+        const missing = [];
+        
+        for (const method of requiredMethods) {
+            if (typeof this[method] !== 'function') {
+                missing.push(method);
+            }
+        }
+        
+        if (missing.length > 0) {
+            console.error('CloudStorageManager missing methods:', missing);
+            return false;
+        }
+        
+        console.log('CloudStorageManager: All required methods available');
+        return true;
+    }
 }
 
 // Initialize the cloud storage manager
 window.cloudStorageManager = new CloudStorageManager();
+window.cloudStorage = window.cloudStorageManager; // Alias for backward compatibility
+
+// Wait for DOM and initialize
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial UI update
+    window.cloudStorageManager.updateUI();
+    
+    console.log('Cloud Storage Manager initialized');
+    console.log('Available backends: localStorage, firebase, supabase');
+});

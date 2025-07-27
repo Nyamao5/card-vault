@@ -25,12 +25,44 @@ class FastCardVault {
         document.getElementById('hideCards').onclick = () => this.hideCards();
         document.getElementById('clearAllCards').onclick = () => this.clearAll();
         document.getElementById('darkModeToggle').onclick = () => this.toggleDark();
-        document.getElementById('clearConsole').onclick = () => this.clearLog();
-
-        // Storage change
-        document.getElementById('storageBackend').onchange = (e) => {
+        document.getElementById('clearConsole').onclick = () => this.clearLog();        // Storage change with better error handling
+        document.getElementById('storageBackend').onchange = async (e) => {
+            const selectedBackend = e.target.value;
+            this.log(`🔄 Switching to ${selectedBackend} storage...`);
+            
+            // Show/hide cloud setup info
+            const cloudSetupInfo = document.getElementById('cloudSetupInfo');
+            if (selectedBackend !== 'localStorage') {
+                cloudSetupInfo.classList.remove('hidden');
+            } else {
+                cloudSetupInfo.classList.add('hidden');
+            }
+            
             if (window.cloudStorage) {
-                window.cloudStorage.setBackend(e.target.value);
+                try {
+                    const success = await window.cloudStorage.setBackend(selectedBackend);
+                    if (!success) {
+                        // Revert to localStorage if cloud setup fails
+                        this.log(`❌ ${selectedBackend} setup failed - reverting to localStorage`);
+                        e.target.value = 'localStorage';
+                        await window.cloudStorage.setBackend('localStorage');
+                        cloudSetupInfo.classList.add('hidden'); // Hide setup info when reverting
+                        this.showNotification(`${selectedBackend} connection failed. Check console for details.`, 'error');
+                    } else {
+                        this.log(`✅ Successfully switched to ${selectedBackend} storage`);
+                        if (selectedBackend !== 'localStorage') {
+                            this.showNotification(`Connected to ${selectedBackend}!`, 'success');
+                        }
+                    }
+                } catch (error) {
+                    this.log(`💥 Error switching to ${selectedBackend}: ${error.message}`);
+                    e.target.value = 'localStorage';
+                    await window.cloudStorage.setBackend('localStorage');
+                    cloudSetupInfo.classList.add('hidden'); // Hide setup info when reverting
+                    this.showNotification('Storage connection failed - using localStorage', 'error');
+                }
+            } else {
+                this.log('⚠️ Cloud storage manager not available');
             }
         };
 
@@ -238,15 +270,13 @@ class FastCardVault {
         if (number.startsWith('3')) return 'Amex';
         if (number.startsWith('6')) return 'Discover';
         return 'Unknown';
-    }
-
-    getCardGradient(cardType) {
+    }    getCardGradient(cardType) {
         const gradients = {
-            'Visa': 'linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4472c4 100%)',
-            'Mastercard': 'linear-gradient(135deg, #eb001b 0%, #f79e1b 50%, #ff6b35 100%)',
-            'Amex': 'linear-gradient(135deg, #006fcf 0%, #0099cc 50%, #00b4d8 100%)',
-            'Discover': 'linear-gradient(135deg, #ff6b00 0%, #ff8500 50%, #ffa000 100%)',
-            'Unknown': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #9575cd 100%)'
+            'Visa': 'linear-gradient(135deg, #4F46E5 0%, #6366F1 50%, #3B82F6 100%)',
+            'Mastercard': 'linear-gradient(135deg, #4F46E5 0%, #6366F1 50%, #8B5CF6 100%)',
+            'Amex': 'linear-gradient(135deg, #3730A3 0%, #4F46E5 50%, #6366F1 100%)',
+            'Discover': 'linear-gradient(135deg, #6366F1 0%, #3B82F6 50%, #1D4ED8 100%)',
+            'Unknown': 'linear-gradient(135deg, #4F46E5 0%, #6366F1 50%, #3B82F6 100%)'
         };
         return gradients[cardType] || gradients['Unknown'];
     }
@@ -324,6 +354,13 @@ class FastCardVault {
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
     window.fastVault = new FastCardVault();
+    
+    // Validate cloud storage methods are available after initialization
+    setTimeout(() => {
+        if (window.cloudStorage && typeof window.cloudStorage.validateMethods === 'function') {
+            window.cloudStorage.validateMethods();
+        }
+    }, 1000);
 });
 
 // For demo data compatibility

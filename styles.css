@@ -1,11 +1,17 @@
 /* Custom styles for Card Vault */
 
-/* Dark mode variables */
+/* Professional Blue Theme Variables */
 :root {
     --bg-light: #f8fafc;
-    --bg-dark: #1a202c;
-    --text-light: #2d3748;
+    --bg-dark: #1e293b;
+    --text-light: #334155;
     --text-dark: #e2e8f0;
+    --primary-blue: #4F46E5;
+    --primary-blue-light: #6366F1;
+    --primary-blue-dark: #3730A3;
+    --accent-blue: #3B82F6;
+    --light-blue: #EEF2FF;
+    --border-color: #E2E8F0;
 }
 
 /* Base styles */
@@ -15,7 +21,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
@@ -29,9 +35,9 @@ body::before {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(79, 70, 229, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(79, 70, 229, 0.02) 0%, transparent 50%);
     pointer-events: none;
     z-index: -1;
 }
@@ -43,9 +49,9 @@ body.dark {
 
 body.dark::before {
     background: 
-        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(79, 70, 229, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
 }
 
 /* Card animations */
@@ -66,22 +72,23 @@ body.dark::before {
 
 /* Custom card styling */
 .card-item {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--border-color);
     border-radius: 1rem;
     padding: 1.5rem;
-    color: white;
+    color: var(--text-light);
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.1);
 }
 
 .card-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 32px rgba(79, 70, 229, 0.15);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(238, 242, 255, 0.95) 100%);
+    border-color: var(--primary-blue-light);
 }
 
 .card-item::before {
@@ -92,8 +99,7 @@ body.dark::before {
     right: 0;
     bottom: 0;
     background: 
-        linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%),
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>');
+        linear-gradient(135deg, transparent 0%, rgba(79, 70, 229, 0.05) 50%, transparent 100%);
     opacity: 0.6;
     pointer-events: none;
 }
@@ -110,9 +116,9 @@ body.dark::before {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(79, 70, 229, 0.2);
     border-radius: 50%;
-    border-top-color: #fff;
+    border-top-color: var(--primary-blue);
     animation: spin 1s ease-in-out infinite;
 }
 
@@ -123,7 +129,7 @@ body.dark::before {
 /* Console styling */
 #consoleLog {
     scrollbar-width: thin;
-    scrollbar-color: #4a5568 #2d3748;
+    scrollbar-color: var(--primary-blue) #f1f5f9;
 }
 
 #consoleLog::-webkit-scrollbar {
@@ -131,28 +137,28 @@ body.dark::before {
 }
 
 #consoleLog::-webkit-scrollbar-track {
-    background: #2d3748;
+    background: #f1f5f9;
     border-radius: 4px;
 }
 
 #consoleLog::-webkit-scrollbar-thumb {
-    background: #4a5568;
+    background: var(--primary-blue);
     border-radius: 4px;
 }
 
 #consoleLog::-webkit-scrollbar-thumb:hover {
-    background: #718096;
+    background: var(--primary-blue-dark);
 }
 
 /* Form validation styles */
 .error {
-    border-color: #f56565 !important;
-    box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.1) !important;
+    border-color: #EF4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
 }
 
 .success {
-    border-color: #48bb78 !important;
-    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1) !important;
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
 }
 
 /* Button hover effects */
@@ -170,7 +176,7 @@ button::before {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(79, 70, 229, 0.1);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.6s, height 0.6s;
@@ -182,8 +188,122 @@ button:active::before {
 }
 
 button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15);
+}
+
+/* Additional Professional Blue Theme Enhancements */
+
+/* Professional button styling to match screenshot */
+.bg-indigo-500, .bg-indigo-600 {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%) !important;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.bg-indigo-500:hover, .bg-indigo-600:hover {
+    background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%) !important;
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+}
+
+/* Input field focus states to match blue theme */
+input:focus, select:focus {
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+}
+
+/* Professional card container styling */
+.bg-white {
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08) !important;
+}
+
+/* Console terminal styling with blue accents */
+.text-green-400 {
+    color: #60A5FA !important; /* Light blue instead of green */
+}
+
+.bg-gray-900 {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+/* Professional header styling */
+.bg-gradient-to-r {
+    text-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
+}
+
+/* Clean scrollbar for professional look */
+.bg-black {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    border: 1px solid rgba(79, 70, 229, 0.05);
+}
+
+/* Professional icon colors */
+.fas.fa-shield-alt {
+    color: var(--primary-blue);
+}
+
+.fas.fa-terminal {
+    color: var(--accent-blue) !important;
+}
+
+/* Consistent spacing and typography */
+h1, h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+/* Professional form labels */
+label {
+    font-weight: 500;
+    color: var(--text-light) !important;
+}
+
+.dark label {
+    color: var(--text-dark) !important;
+}
+
+/* Clean selection styling */
+::selection {
+    background-color: rgba(79, 70, 229, 0.2);
+    color: var(--text-light);
+}
+
+/* Professional loading states */
+button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Enhanced card item styling for better visual hierarchy */
+.card-item h3 {
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.card-item .card-number {
+    color: var(--text-light);
+    background: rgba(79, 70, 229, 0.05);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+/* Professional status indicators */
+.text-green-500 {
+    color: var(--primary-blue) !important;
+}
+
+.bg-green-100 {
+    background-color: var(--light-blue) !important;
+}
+
+.border-green-500 {
+    border-color: var(--primary-blue) !important;
+}
+
+.text-green-800 {
+    color: var(--primary-blue-dark) !important;
 }
 
 /* Responsive adjustments */
@@ -216,7 +336,7 @@ button:hover {
 
 /* Gradient text */
 .gradient-text {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -245,39 +365,39 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(79, 70, 229, 0.05);
 }
 
 body::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(79, 70, 229, 0.3);
     border-radius: 6px;
 }
 
 body::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(79, 70, 229, 0.5);
 }
 
 /* Glass morphism container effects */
 .bg-white {
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px rgba(79, 70, 229, 0.08);
 }
 
 .dark .bg-white {
-    background: rgba(30, 41, 59, 0.8) !important;
+    background: rgba(30, 41, 59, 0.9) !important;
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    box-shadow: 0 8px 32px rgba(79, 70, 229, 0.1);
 }
 
 /* Enhanced console styling */
 .bg-gray-900 {
-    background: rgba(15, 23, 42, 0.9) !important;
+    background: rgba(15, 23, 42, 0.95) !important;
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(79, 70, 229, 0.1);
+    box-shadow: 0 8px 32px rgba(79, 70, 229, 0.05);
 }
 
 /* Floating animation for containers */
@@ -292,7 +412,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* Professional header gradient */
 h1 {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
     position: relative;
 }
 
@@ -304,7 +424,62 @@ h1::after {
     transform: translateX(-50%);
     width: 100px;
     height: 3px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
     border-radius: 2px;
     opacity: 0.7;
+}
+
+/* Professional Card Display Theme Updates */
+
+/* Enhanced card styling with blue theme integration */
+.card-item {
+    color: white !important; /* Ensure text is white on gradient backgrounds */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Better text readability on gradients */
+}
+
+.card-item h4 {
+    color: white !important;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.card-item .font-mono {
+    color: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-item .text-sm {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.card-item .opacity-90 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Button styling within cards */
+.card-item button {
+    background: rgba(239, 68, 68, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.card-item button:hover {
+    background: rgba(220, 38, 38, 0.95) !important;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Enhanced hover effects for professional appearance */
+.card-item:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 40px rgba(79, 70, 229, 0.25);
+}
+
+/* Professional card type indicators */
+.card-item .fab, .card-item .fas {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
